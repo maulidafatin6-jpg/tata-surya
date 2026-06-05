@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistem Tata Surya — Media Pembelajaran SD</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --space: #0a0e27;
+    --space2: #111638;
+    --star: #f0e68c;
+    --accent: #ff9d00;
+    --accent2: #ff6b35;
+    --cool: #4fc3f7;
+    --green: #69f0ae;
+    --pink: #f48fb1;
+    --text: #e8eaf6;
+    --text2: #b0bec5;
+    --card: rgba(255,255,255,0.07);
+    --card-border: rgba(255,255,255,0.12);
+    --radius: 20px;
+    --radius-sm: 12px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--space);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Stars background */
+  .stars {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none; z-index: 0;
+    background-image:
+      radial-gradient(1px 1px at 10% 15%, #fff 0%, transparent 100%),
+      radial-gradient(1px 1px at 25% 60%, #fff 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 40% 30%, #fff 0%, transparent 100%),
+      radial-gradient(1px 1px at 55% 80%, #fff 0%, transparent 100%),
+      radial-gradient(1px 1px at 70% 20%, #fff 0%, transparent 100%),
+      radial-gradient(1.5px 1.5px at 80% 50%, #fff 0%, transparent 100%),
+      radial-gradient(1px 1px at 90% 70%, #fff 0%, transparent 100%),
+      radial-gradient(1px 1px at 15% 85%, #fff 0%, transparent 100%),
+      radial-gradient(1px 1px at 35% 45%, rgba(255,255,255,0.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 60% 10%, rgba(255,255,255,0.7) 0%, transparent 100%),
+      radial-gradient(1px 1px at 75% 90%, rgba(255,255,255,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 5% 40%, rgba(255,255,255,0.6) 0%, transparent 100%),
+      radial-gradient(1px 1px at 95% 35%, rgba(255,255,255,0.5) 0%, transparent 100%);
+  }
+
+  .wrapper { position: relative; z-index: 1; max-width: 960px; margin: 0 auto; padding: 0 20px; }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,14,39,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--card-border);
+    padding: 0 20px;
+  }
+  .nav-inner {
+    max-width: 960px; margin: 0 auto;
+    display: flex; align-items: center; gap: 8px;
+    height: 60px; overflow-x: auto;
+  }
+  .nav-btn {
+    flex-shrink: 0;
+    background: none; border: 1.5px solid transparent;
+    color: var(--text2); font-family: 'Nunito', sans-serif;
+    font-size: 14px; font-weight: 700;
+    padding: 6px 16px; border-radius: 30px;
+    cursor: pointer; transition: all .2s; white-space: nowrap;
+  }
+  .nav-btn:hover { color: var(--accent); border-color: var(--accent); }
+  .nav-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .logo { font-family: 'Fredoka One', cursive; font-size: 20px; color: var(--star); margin-right: 12px; flex-shrink: 0; }
+
+  /* SECTIONS */
+  .section { display: none; padding: 40px 0 60px; }
+  .section.active { display: block; }
+
+  /* HERO */
+  .hero {
+    text-align: center; padding: 60px 0 40px;
+  }
+  .hero-sun {
+    width: 120px; height: 120px; margin: 0 auto 24px;
+    background: radial-gradient(circle at 40% 40%, #fff5cc, #ffcc00 50%, #ff9800 80%, #ff5722);
+    border-radius: 50%;
+    box-shadow: 0 0 40px 20px rgba(255,180,0,0.4), 0 0 80px 40px rgba(255,120,0,0.2);
+    animation: pulse-sun 3s ease-in-out infinite;
+  }
+  @keyframes pulse-sun { 0%,100%{ box-shadow: 0 0 40px 20px rgba(255,180,0,0.4), 0 0 80px 40px rgba(255,120,0,0.2); } 50%{ box-shadow: 0 0 60px 30px rgba(255,180,0,0.5), 0 0 100px 50px rgba(255,120,0,0.25); } }
+  .hero h1 { font-family: 'Fredoka One', cursive; font-size: clamp(32px,6vw,52px); color: var(--star); line-height: 1.1; }
+  .hero p { font-size: 17px; color: var(--text2); margin-top: 12px; max-width: 520px; margin-left: auto; margin-right: auto; line-height: 1.6; }
+  .hero-btns { display: flex; gap: 12px; justify-content: center; margin-top: 28px; flex-wrap: wrap; }
+  .btn-primary {
+    background: linear-gradient(135deg, #ff9d00, #ff6b35);
+    color: #fff; border: none; border-radius: 30px;
+    padding: 14px 32px; font-family: 'Nunito', sans-serif;
+    font-size: 16px; font-weight: 800; cursor: pointer;
+    transition: transform .2s, box-shadow .2s;
+    box-shadow: 0 4px 20px rgba(255,120,0,0.4);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(255,120,0,0.5); }
+  .btn-secondary {
+    background: var(--card); border: 1.5px solid var(--card-border);
+    color: var(--text); border-radius: 30px;
+    padding: 13px 28px; font-family: 'Nunito', sans-serif;
+    font-size: 16px; font-weight: 700; cursor: pointer;
+    transition: all .2s;
+  }
+  .btn-secondary:hover { border-color: var(--cool); color: var(--cool); }
+
+  /* PLANET ORBIT ANIMATION */
+  .solar-system {
+    position: relative; width: 340px; height: 340px;
+    margin: 40px auto 20px;
+  }
+  .sun-center {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    width: 64px; height: 64px; border-radius: 50%;
+    background: radial-gradient(circle at 40% 40%, #fff5cc, #ffcc00 50%, #ff9800);
+    box-shadow: 0 0 24px 10px rgba(255,180,0,0.5);
+    animation: pulse-sun 3s ease-in-out infinite;
+  }
+  .orbit {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.08);
+    animation: spin linear infinite;
+  }
+  .orbit::before {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    top: 0; left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  @keyframes spin { from { transform: translate(-50%,-50%) rotate(0deg); } to { transform: translate(-50%,-50%) rotate(360deg); } }
+
+  .o1 { width: 100px; height: 100px; animation-duration: 4s; }
+  .o1::before { width: 10px; height: 10px; background: #b0bec5; box-shadow: 0 0 6px 2px rgba(176,190,197,0.5); }
+  .o2 { width: 148px; height: 148px; animation-duration: 7s; }
+  .o2::before { width: 14px; height: 14px; background: #ffcc80; box-shadow: 0 0 8px 3px rgba(255,200,100,0.5); }
+  .o3 { width: 198px; height: 198px; animation-duration: 12s; }
+  .o3::before { width: 13px; height: 13px; background: #4fc3f7; box-shadow: 0 0 8px 3px rgba(79,195,247,0.5); }
+  .o4 { width: 250px; height: 250px; animation-duration: 22s; }
+  .o4::before { width: 12px; height: 12px; background: #ef9a9a; box-shadow: 0 0 6px 2px rgba(239,154,154,0.5); }
+  .o5 { width: 310px; height: 310px; animation-duration: 55s; }
+  .o5::before { width: 22px; height: 22px; background: #ffb74d; box-shadow: 0 0 12px 4px rgba(255,180,80,0.5); }
+
+  /* PLANET CARDS */
+  .section-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 30px; color: var(--star);
+    text-align: center; margin-bottom: 8px;
+  }
+  .section-sub { text-align: center; color: var(--text2); font-size: 15px; margin-bottom: 32px; }
+
+  .planet-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+  }
+  .planet-card {
+    background: var(--card);
+    border: 1.5px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: 24px 20px;
+    cursor: pointer;
+    transition: transform .2s, border-color .2s, box-shadow .2s;
+    position: relative; overflow: hidden;
+  }
+  .planet-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
+  .planet-card::before {
+    content: ''; position: absolute; top: -40px; right: -40px;
+    width: 120px; height: 120px; border-radius: 50%;
+    opacity: 0.08;
+  }
+  .planet-icon {
+    width: 72px; height: 72px; border-radius: 50%;
+    margin-bottom: 16px; position: relative; z-index: 1;
+  }
+  .planet-name {
+    font-family: 'Fredoka One', cursive; font-size: 22px;
+    margin-bottom: 4px;
+  }
+  .planet-latin { font-size: 12px; color: var(--text2); margin-bottom: 12px; font-style: italic; }
+  .planet-desc { font-size: 14px; line-height: 1.6; color: var(--text2); }
+  .planet-facts { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .fact-chip {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px; padding: 4px 12px;
+    font-size: 12px; font-weight: 700;
+  }
+
+  /* MATERI DETAIL */
+  .materi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+  .materi-card {
+    background: var(--card); border: 1.5px solid var(--card-border);
+    border-radius: var(--radius); padding: 28px 24px;
+    transition: transform .2s;
+  }
+  .materi-card:hover { transform: translateY(-3px); }
+  .materi-icon { font-size: 40px; margin-bottom: 14px; }
+  .materi-title { font-family: 'Fredoka One', cursive; font-size: 20px; color: var(--accent); margin-bottom: 10px; }
+  .materi-text { font-size: 14px; line-height: 1.7; color: var(--text2); }
+  .materi-text b { color: var(--text); }
+
+  .info-box {
+    background: rgba(79,195,247,0.1); border: 1.5px solid rgba(79,195,247,0.25);
+    border-radius: var(--radius-sm); padding: 18px 20px; margin-top: 24px;
+    font-size: 14px; line-height: 1.7;
+  }
+  .info-box .info-label { font-weight: 800; color: var(--cool); margin-bottom: 6px; font-size: 13px; letter-spacing: .05em; text-transform: uppercase; }
+
+  /* URUTAN PLANET */
+  .planet-order { display: flex; gap: 0; overflow-x: auto; padding-bottom: 12px; align-items: flex-end; }
+  .order-item { flex-shrink: 0; text-align: center; padding: 0 10px; }
+  .order-dot { border-radius: 50%; margin: 0 auto 10px; }
+  .order-num { font-family: 'Fredoka One', cursive; font-size: 18px; color: var(--star); }
+  .order-name { font-size: 12px; color: var(--text2); font-weight: 700; margin-top: 4px; }
+  .order-sep { width: 20px; height: 2px; background: rgba(255,255,255,0.15); align-self: center; flex-shrink: 0; margin-bottom: 28px; }
+
+  /* QUIZ */
+  .quiz-container { max-width: 680px; margin: 0 auto; }
+  .quiz-progress { display: flex; gap: 6px; margin-bottom: 32px; }
+  .quiz-dot {
+    flex: 1; height: 6px; border-radius: 3px;
+    background: rgba(255,255,255,0.12);
+    transition: background .3s;
+  }
+  .quiz-dot.done { background: var(--green); }
+  .quiz-dot.active { background: var(--accent); }
+
+  .quiz-card {
+    background: var(--card); border: 1.5px solid var(--card-border);
+    border-radius: var(--radius); padding: 36px 32px;
+  }
+  .quiz-q-num { font-size: 12px; font-weight: 800; color: var(--accent); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 12px; }
+  .quiz-question { font-family: 'Fredoka One', cursive; font-size: 24px; line-height: 1.3; margin-bottom: 28px; }
+  .quiz-options { display: grid; gap: 12px; }
+  .quiz-opt {
+    background: rgba(255,255,255,0.05);
+    border: 1.5px solid rgba(255,255,255,0.12);
+    border-radius: var(--radius-sm); padding: 16px 20px;
+    font-family: 'Nunito', sans-serif; font-size: 16px; font-weight: 600;
+    color: var(--text); cursor: pointer; text-align: left;
+    transition: all .2s;
+  }
+  .quiz-opt:hover:not(:disabled) { border-color: var(--cool); color: var(--cool); background: rgba(79,195,247,0.08); }
+  .quiz-opt.correct { background: rgba(105,240,174,0.15); border-color: var(--green); color: var(--green); }
+  .quiz-opt.wrong { background: rgba(244,67,54,0.15); border-color: #ef5350; color: #ef9a9a; }
+  .quiz-opt:disabled { cursor: default; }
+
+  .quiz-feedback {
+    display: none; margin-top: 20px;
+    border-radius: var(--radius-sm); padding: 16px 20px;
+    font-size: 15px; font-weight: 700; line-height: 1.5;
+  }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.ok { background: rgba(105,240,174,0.1); border: 1.5px solid var(--green); color: var(--green); }
+  .quiz-feedback.no { background: rgba(244,67,54,0.1); border: 1.5px solid #ef5350; color: #ef9a9a; }
+
+  .quiz-nav { display: flex; justify-content: flex-end; margin-top: 24px; }
+
+  .quiz-result {
+    text-align: center; padding: 48px 32px;
+    background: var(--card); border: 1.5px solid var(--card-border);
+    border-radius: var(--radius);
+  }
+  .quiz-result-score { font-family: 'Fredoka One', cursive; font-size: 72px; line-height: 1; }
+  .quiz-result-label { font-size: 16px; color: var(--text2); margin-top: 8px; }
+  .quiz-result-msg { font-size: 20px; font-weight: 800; margin-top: 20px; }
+  .star-row { font-size: 40px; margin: 16px 0; }
+
+  /* MISC */
+  .divider { height: 1px; background: var(--card-border); margin: 32px 0; }
+  .tag { display: inline-block; background: rgba(255,157,0,0.15); border: 1px solid rgba(255,157,0,0.3); color: var(--accent); border-radius: 20px; padding: 3px 12px; font-size: 12px; font-weight: 800; margin-bottom: 8px; }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .quiz-card { padding: 24px 20px; }
+    .quiz-question { font-size: 20px; }
+    .planet-order { gap: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="stars"></div>
+
+<nav>
+  <div class="nav-inner">
+    <div class="logo">🌟 TataSurya</div>
+    <button class="nav-btn active" onclick="showSection('beranda')">🏠 Beranda</button>
+    <button class="nav-btn" onclick="showSection('planet')">🪐 Planet</button>
+    <button class="nav-btn" onclick="showSection('materi')">📚 Materi</button>
+    <button class="nav-btn" onclick="showSection('quiz')">🎯 Kuis</button>
+  </div>
+</nav>
+
+<!-- BERANDA -->
+<div class="section active" id="section-beranda">
+<div class="wrapper">
+  <div class="hero">
+    <div class="hero-sun"></div>
+    <h1>Sistem Tata Surya</h1>
+    <p>Jelajahi alam semesta yang menakjubkan! Belajar tentang Matahari, planet-planet, dan benda langit lainnya yang membentuk tata surya kita.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="showSection('planet')">🚀 Jelajahi Planet</button>
+      <button class="btn-secondary" onclick="showSection('quiz')">🎯 Mulai Kuis</button>
+    </div>
+  </div>
+
+  <!-- Mini solar system animation -->
+  <div class="solar-system">
+    <div class="orbit o1"></div>
+    <div class="orbit o2"></div>
+    <div class="orbit o3"></div>
+    <div class="orbit o4"></div>
+    <div class="orbit o5"></div>
+    <div class="sun-center"></div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Quick facts -->
+  <div class="materi-grid">
+    <div class="materi-card">
+      <div class="materi-icon">☀️</div>
+      <div class="materi-title">Pusat Tata Surya</div>
+      <div class="materi-text">Matahari adalah bintang di pusat tata surya kita. Semua planet mengelilingi Matahari karena gaya gravitasinya yang sangat kuat.</div>
+    </div>
+    <div class="materi-card">
+      <div class="materi-icon">🪐</div>
+      <div class="materi-title">8 Planet</div>
+      <div class="materi-text">Tata surya kita memiliki <b>8 planet</b> yang mengelilingi Matahari. Dari yang terkecil hingga terbesar: Merkurius, Venus, Bumi, Mars, Jupiter, Saturnus, Uranus, Neptunus.</div>
+    </div>
+    <div class="materi-card">
+      <div class="materi-icon">🌙</div>
+      <div class="materi-title">Benda Langit Lain</div>
+      <div class="materi-text">Selain planet, tata surya juga berisi <b>satelit</b> (bulan), asteroid, komet, dan meteoroid yang mengisi ruang antarplanet.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PLANET -->
+<div class="section" id="section-planet">
+<div class="wrapper">
+  <div class="section-title">🪐 Mengenal Planet-Planet</div>
+  <div class="section-sub">Klik kartu untuk melihat fakta menarik!</div>
+
+  <!-- Urutan dari Matahari -->
+  <div class="info-box" style="margin-bottom:32px;">
+    <div class="info-label">⚡ Urutan Planet dari Matahari</div>
+    <div class="planet-order">
+      <div class="order-item"><div class="order-dot" style="width:28px;height:28px;background:#b0bec5;box-shadow:0 0 10px #b0bec5;"></div><div class="order-num">1</div><div class="order-name">Merkurius</div></div>
+      <div class="order-sep"></div>
+      <div class="order-item"><div class="order-dot" style="width:36px;height:36px;background:#ffcc80;box-shadow:0 0 10px #ffcc80;"></div><div class="order-num">2</div><div class="order-name">Venus</div></div>
+      <div class="order-sep"></div>
+      <div class="order-item"><div class="order-dot" style="width:35px;height:35px;background:#4fc3f7;box-shadow:0 0 10px #4fc3f7;"></div><div class="order-num">3</div><div class="order-name">Bumi</div></div>
+      <div class="order-sep"></div>
+      <div class="order-item"><div class="order-dot" style="width:30px;height:30px;background:#ef9a9a;box-shadow:0 0 10px #ef9a9a;"></div><div class="order-num">4</div><div class="order-name">Mars</div></div>
+      <div class="order-sep"></div>
+      <div class="order-item"><div class="order-dot" style="width:56px;height:56px;background:#ffb74d;box-shadow:0 0 14px #ffb74d;"></div><div class="order-num">5</div><div class="order-name">Jupiter</div></div>
+      <div class="order-sep"></div>
+      <div class="order-item"><div class="order-dot" style="width:48px;height:48px;background:#ffe082;box-shadow:0 0 12px #ffe082;"></div><div class="order-num">6</div><div class="order-name">Saturnus</div></div>
+      <div class="order-sep"></div>
+      <div class="order-item"><div class="order-dot" style="width:38px;height:38px;background:#80deea;box-shadow:0 0 10px #80deea;"></div><div class="order-num">7</div><div class="order-name">Uranus</div></div>
+      <div class="order-sep"></div>
+      <div class="order-item"><div class="order-dot" style="width:36px;height:36px;background:#7986cb;box-shadow:0 0 10px #7986cb;"></div><div class="order-num">8</div><div class="order-name">Neptunus</div></div>
+    </div>
+  </div>
+
+  <div class="planet-grid">
+
+    <div class="planet-card" style="border-color:rgba(176,190,197,0.3);" onclick="toggleCard(this)">
+      <div class="planet-icon" style="background:radial-gradient(circle at 35% 35%, #eceff1, #b0bec5 60%, #78909c); box-shadow:0 0 20px rgba(176,190,197,0.4);"></div>
+      <div class="planet-name" style="color:#eceff1;">☿ Merkurius</div>
+      <div class="planet-latin">Mercury</div>
+      <div class="planet-desc">Planet terkecil dan terdekat dengan Matahari. Tidak memiliki atmosfer yang berarti. Permukaannya penuh kawah seperti Bulan.</div>
+      <div class="planet-facts">
+        <span class="fact-chip" style="color:#eceff1;">🌡️ -180°C s/d 430°C</span>
+        <span class="fact-chip" style="color:#eceff1;">⏱️ 88 hari/tahun</span>
+        <span class="fact-chip" style="color:#eceff1;">🔭 Planet terkecil</span>
+      </div>
+    </div>
+
+    <div class="planet-card" style="border-color:rgba(255,204,128,0.3);" onclick="toggleCard(this)">
+      <div class="planet-icon" style="background:radial-gradient(circle at 35% 35%, #fff9c4, #ffcc80 60%, #ffa726); box-shadow:0 0 20px rgba(255,204,128,0.4);"></div>
+      <div class="planet-name" style="color:#ffcc80;">♀ Venus</div>
+      <div class="planet-latin">Venus</div>
+      <div class="planet-desc">Planet terpanas di tata surya meski bukan yang terdekat ke Matahari. Diselimuti awan tebal asam sulfat. Sering terlihat sebagai bintang paling terang di langit malam.</div>
+      <div class="planet-facts">
+        <span class="fact-chip" style="color:#ffcc80;">🌡️ 465°C rata-rata</span>
+        <span class="fact-chip" style="color:#ffcc80;">⏱️ 225 hari/tahun</span>
+        <span class="fact-chip" style="color:#ffcc80;">💫 Planet terpanas</span>
+      </div>
+    </div>
+
+    <div class="planet-card" style="border-color:rgba(79,195,247,0.3);" onclick="toggleCard(this)">
+      <div class="planet-icon" style="background:radial-gradient(circle at 35% 35%, #e3f2fd, #4fc3f7 40%, #29b6f6 65%, #0288d1); box-shadow:0 0 20px rgba(79,195,247,0.4);"></div>
+      <div class="planet-name" style="color:#4fc3f7;">🌍 Bumi</div>
+      <div class="planet-latin">Earth</div>
+      <div class="planet-desc">Satu-satunya planet yang diketahui memiliki kehidupan. Permukaannya terdiri dari 71% air. Memiliki satu satelit alami yaitu Bulan.</div>
+      <div class="planet-facts">
+        <span class="fact-chip" style="color:#4fc3f7;">🌡️ 15°C rata-rata</span>
+        <span class="fact-chip" style="color:#4fc3f7;">⏱️ 365 hari/tahun</span>
+        <span class="fact-chip" style="color:#4fc3f7;">🌊 71% air</span>
+      </div>
+    </div>
+
+    <div class="planet-card" style="border-color:rgba(239,154,154,0.3);" onclick="toggleCard(this)">
+      <div class="planet-icon" style="background:radial-gradient(circle at 35% 35%, #ffcdd2, #ef9a9a 60%, #e57373); box-shadow:0 0 20px rgba(239,154,154,0.4);"></div>
+      <div class="planet-name" style="color:#ef9a9a;">♂ Mars</div>
+      <div class="planet-latin">Mars</div>
+      <div class="planet-desc">Dijuluki Planet Merah karena tanahnya mengandung banyak besi oksida (karat). Memiliki gunung tertinggi di tata surya, Olympus Mons.</div>
+      <div class="planet-facts">
+        <span class="fact-chip" style="color:#ef9a9a;">🌡️ -60°C rata-rata</span>
+        <span class="fact-chip" style="color:#ef9a9a;">⏱️ 687 hari/tahun</span>
+        <span class="fact-chip" style="color:#ef9a9a;">🔴 Planet Merah</span>
+      </div>
+    </div>
+
+    <div class="planet-card" style="border-color:rgba(255,183,77,0.3);" onclick="toggleCard(this)">
+      <div class="planet-icon" style="background:radial-gradient(circle at 35% 35%, #fff8e1, #ffb74d 50%, #ff9800 80%); box-shadow:0 0 20px rgba(255,183,77,0.5);"></div>
+      <div class="planet-name" style="color:#ffb74d;">♃ Jupiter</div>
+      <div class="planet-latin">Jupiter</div>
+      <div class="planet-desc">Planet terbesar di tata surya! Berupa bola gas raksasa. Memiliki badai besar yang disebut <b style="color:#ffb74d;">Bintik Merah Besar</b> yang sudah berlangsung ratusan tahun.</div>
+      <div class="planet-facts">
+        <span class="fact-chip" style="color:#ffb74d;">📏 Planet terbesar</span>
+        <span class="fact-chip" style="color:#ffb74d;">⏱️ 12 tahun/tahun</span>
+        <span class="fact-chip" style="color:#ffb74d;">🌀 95+ bulan</span>
+      </div>
+    </div>
+
+    <div class="planet-card" style="border-color:rgba(255,224,130,0.3);" onclick="toggleCard(this)">
+      <div class="planet-icon" style="background:radial-gradient(circle at 35% 35%, #fffde7, #ffe082 55%, #ffd54f); box-shadow:0 0 20px rgba(255,224,130,0.4); position:relative;">
+        <div style="position:absolute;top:50%;left:-8px;right:-8px;height:18px;transform:translateY(-50%);background:linear-gradient(90deg, transparent 10%, rgba(255,224,130,0.6) 30%, rgba(255,224,130,0.6) 70%, transparent 90%);border-radius:50%;"></div>
+      </div>
+      <div class="planet-name" style="color:#ffe082;">♄ Saturnus</div>
+      <div class="planet-latin">Saturn</div>
+      <div class="planet-desc">Dikenal dengan cincin-cincinnya yang indah, terbuat dari es dan batu. Planet paling ringan di tata surya — bahkan bisa mengapung di air!</div>
+      <div class="planet-facts">
+        <span class="fact-chip" style="color:#ffe082;">💍 Punya cincin</span>
+        <span class="fact-chip" style="color:#ffe082;">⏱️ 29 tahun/tahun</span>
+        <span class="fact-chip" style="color:#ffe082;">🌊 Bisa mengapung</span>
+      </div>
+    </div>
+
+    <div class="planet-card" style="border-color:rgba(128,222,234,0.3);" onclick="toggleCard(this)">
+      <div class="planet-icon" style="background:radial-gradient(circle at 35% 35%, #e0f7fa, #80deea 60%, #26c6da); box-shadow:0 0 20px rgba(128,222,234,0.4);"></div>
+      <div class="planet-name" style="color:#80deea;">⛢ Uranus</div>
+      <div class="planet-latin">Uranus</div>
+      <div class="planet-desc">Planet es raksasa berwarna biru-hijau. Uniknya, Uranus berputar miring hampir 90° — seolah-olah berbaring! Ini membuatnya memiliki musim yang sangat ekstrem.</div>
+      <div class="planet-facts">
+        <span class="fact-chip" style="color:#80deea;">🔵 Planet es biru</span>
+        <span class="fact-chip" style="color:#80deea;">⏱️ 84 tahun/tahun</span>
+        <span class="fact-chip" style="color:#80deea;">↪️ Miring 98°</span>
+      </div>
+    </div>
+
+    <div class="planet-card" style="border-color:rgba(121,134,203,0.3);" onclick="toggleCard(this)">
+      <div class="planet-icon" style="background:radial-gradient(circle at 35% 35%, #c5cae9, #7986cb 60%, #5c6bc0); box-shadow:0 0 20px rgba(121,134,203,0.4);"></div>
+      <div class="planet-name" style="color:#9fa8da;">♆ Neptunus</div>
+      <div class="planet-latin">Neptune</div>
+      <div class="planet-desc">Planet terjauh dari Matahari. Memiliki angin terkencang di tata surya mencapai 2.100 km/jam! Berwarna biru indah karena gas metana di atmosfernya.</div>
+      <div class="planet-facts">
+        <span class="fact-chip" style="color:#9fa8da;">🌬️ Angin 2100 km/h</span>
+        <span class="fact-chip" style="color:#9fa8da;">⏱️ 165 tahun/tahun</span>
+        <span class="fact-chip" style="color:#9fa8da;">🔭 Terjauh</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- MATERI -->
+<div class="section" id="section-materi">
+<div class="wrapper">
+  <div class="section-title">📚 Materi Tata Surya</div>
+  <div class="section-sub">Pelajari semua tentang sistem tata surya kita</div>
+
+  <div class="tag">Bagian 1</div>
+  <h2 style="font-family:'Fredoka One',cursive;font-size:22px;color:var(--cool);margin-bottom:16px;">☀️ Matahari — Bintang Kita</h2>
+  <div class="materi-grid">
+    <div class="materi-card">
+      <div class="materi-icon">🌞</div>
+      <div class="materi-title">Apa itu Matahari?</div>
+      <div class="materi-text">Matahari adalah <b>bintang</b> berupa bola gas yang sangat besar dan panas. Matahari terdiri dari gas hidrogen dan helium. Di dalam Matahari terjadi reaksi yang disebut <b>fusi nuklir</b> yang menghasilkan energi berupa cahaya dan panas.</div>
+    </div>
+    <div class="materi-card">
+      <div class="materi-icon">📏</div>
+      <div class="materi-title">Ukuran Matahari</div>
+      <div class="materi-text">Matahari sangat besar! Diameternya sekitar <b>1,4 juta km</b> — sekitar 109 kali diameter Bumi. Jika Matahari sebesar bola basket, maka Bumi hanya sebesar kacang polong!</div>
+    </div>
+    <div class="materi-card">
+      <div class="materi-icon">⚡</div>
+      <div class="materi-title">Manfaat Matahari</div>
+      <div class="materi-text">Matahari memberi kita <b>cahaya dan panas</b> yang dibutuhkan makhluk hidup. Tumbuhan menggunakan sinar Matahari untuk fotosintesis. Matahari juga menjaga semua planet tetap beredar di orbitnya.</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="tag">Bagian 2</div>
+  <h2 style="font-family:'Fredoka One',cursive;font-size:22px;color:var(--cool);margin-bottom:16px;">🌀 Gerak Planet</h2>
+  <div class="materi-grid">
+    <div class="materi-card">
+      <div class="materi-icon">🔄</div>
+      <div class="materi-title">Revolusi Planet</div>
+      <div class="materi-text"><b>Revolusi</b> adalah pergerakan planet mengelilingi Matahari. Lintasan planet disebut <b>orbit</b>. Waktu yang diperlukan planet untuk satu kali mengelilingi Matahari disebut <b>periode revolusi</b> atau <b>satu tahun</b> planet tersebut.</div>
+    </div>
+    <div class="materi-card">
+      <div class="materi-icon">🌀</div>
+      <div class="materi-title">Rotasi Planet</div>
+      <div class="materi-text"><b>Rotasi</b> adalah perputaran planet pada porosnya sendiri. Rotasi Bumi berlangsung selama <b>24 jam</b> (satu hari). Rotasi Bumi menyebabkan terjadinya <b>siang dan malam</b>.</div>
+    </div>
+    <div class="materi-card">
+      <div class="materi-icon">🧲</div>
+      <div class="materi-title">Gravitasi Matahari</div>
+      <div class="materi-text"><b>Gravitasi</b> adalah gaya tarik-menarik antara benda. Gravitasi Matahari yang kuat membuat semua planet tetap beredar mengelilinginya dan tidak terbang ke luar angkasa.</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="tag">Bagian 3</div>
+  <h2 style="font-family:'Fredoka One',cursive;font-size:22px;color:var(--cool);margin-bottom:16px;">🌙 Benda Langit Lainnya</h2>
+  <div class="materi-grid">
+    <div class="materi-card">
+      <div class="materi-icon">🌙</div>
+      <div class="materi-title">Satelit (Bulan)</div>
+      <div class="materi-text">Satelit adalah benda langit yang mengelilingi planet. Bulan adalah satelit alami Bumi. Bulan tidak punya cahaya sendiri — ia memantulkan cahaya Matahari. Jarak Bulan ke Bumi sekitar <b>384.000 km</b>.</div>
+    </div>
+    <div class="materi-card">
+      <div class="materi-icon">☄️</div>
+      <div class="materi-title">Komet</div>
+      <div class="materi-text">Komet adalah benda langit yang mengelilingi Matahari dengan orbit lonjong. Komet terdiri dari es, debu, dan gas. Saat mendekati Matahari, komet membentuk <b>ekor yang bercahaya</b> dan selalu menjauh dari Matahari.</div>
+    </div>
+    <div class="materi-card">
+      <div class="materi-icon">🪨</div>
+      <div class="materi-title">Asteroid & Meteoroid</div>
+      <div class="materi-text"><b>Asteroid</b> adalah batu besar yang mengelilingi Matahari, kebanyakan di antara Mars dan Jupiter (sabuk asteroid). <b>Meteoroid</b> adalah batu kecil di luar angkasa. Jika masuk atmosfer Bumi dan terbakar disebut <b>meteor</b> (bintang jatuh).</div>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <div class="info-label">💡 Tahukah Kamu?</div>
+    Cahaya Matahari membutuhkan waktu sekitar <b>8 menit 20 detik</b> untuk sampai ke Bumi. Jadi cahaya yang kita lihat sekarang sebenarnya sudah dikirim Matahari lebih dari 8 menit yang lalu! Kecepatan cahaya sekitar 300.000 km per detik.
+  </div>
+
+  <div class="info-box" style="background:rgba(105,240,174,0.08);border-color:rgba(105,240,174,0.25);margin-top:16px;">
+    <div class="info-label" style="color:var(--green);">🎵 Cara Mudah Mengingat Urutan Planet</div>
+    <b>Me</b>rkurius – <b>Ve</b>nus – <b>Bu</b>mi – <b>Ma</b>rs – <b>Ju</b>piter – <b>Sa</b>turnus – <b>U</b>ranus – <b>Ne</b>ptunus<br><br>
+    Kalimat ajaib: "<b>Me Ve Bu Ma Ju Sa U Ne</b>" — atau buat kalimatmu sendiri!
+  </div>
+</div>
+</div>
+
+<!-- QUIZ -->
+<div class="section" id="section-quiz">
+<div class="wrapper">
+  <div class="section-title">🎯 Kuis Tata Surya</div>
+  <div class="section-sub">Uji pengetahuanmu! Ada 10 pertanyaan seru menunggumu.</div>
+
+  <div class="quiz-container">
+    <div class="quiz-progress" id="quiz-progress"></div>
+
+    <div id="quiz-area">
+      <div class="quiz-card" id="quiz-card">
+        <div class="quiz-q-num" id="quiz-qnum"></div>
+        <div class="quiz-question" id="quiz-qtext"></div>
+        <div class="quiz-options" id="quiz-opts"></div>
+        <div class="quiz-feedback" id="quiz-feedback"></div>
+        <div class="quiz-nav">
+          <button class="btn-primary" id="quiz-next" onclick="nextQuestion()" style="display:none;">Lanjut ➡️</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="quiz-result" style="display:none;">
+      <div class="quiz-result">
+        <div class="star-row" id="result-stars"></div>
+        <div class="quiz-result-score" id="result-score"></div>
+        <div class="quiz-result-label">dari 10 pertanyaan benar</div>
+        <div class="quiz-result-msg" id="result-msg"></div>
+        <div style="margin-top:28px;">
+          <button class="btn-primary" onclick="restartQuiz()">🔄 Coba Lagi</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+// NAV
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('section-' + id).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (id === 'quiz' && currentQ === 0 && !quizStarted) initQuiz();
+}
+
+function toggleCard(card) {
+  card.style.transform = card.style.transform === 'scale(0.97)' ? '' : 'scale(0.97)';
+  setTimeout(() => { card.style.transform = ''; }, 180);
+}
+
+// QUIZ DATA
+const questions = [
+  { q: "Planet apa yang paling dekat dengan Matahari?", opts: ["Merkurius", "Venus", "Bumi", "Mars"], ans: 0, explain: "✅ Benar! Merkurius adalah planet terdekat dengan Matahari, berjarak sekitar 58 juta km." },
+  { q: "Planet mana yang dijuluki 'Planet Merah'?", opts: ["Jupiter", "Venus", "Mars", "Saturnus"], ans: 2, explain: "✅ Tepat! Mars dijuluki Planet Merah karena permukaannya mengandung banyak besi oksida (karat)." },
+  { q: "Berapa jumlah planet dalam tata surya kita?", opts: ["7 planet", "8 planet", "9 planet", "10 planet"], ans: 1, explain: "✅ Benar! Tata surya kita memiliki 8 planet. Pluto sudah tidak termasuk planet sejak 2006." },
+  { q: "Planet manakah yang memiliki cincin yang terkenal?", opts: ["Jupiter", "Uranus", "Neptunus", "Saturnus"], ans: 3, explain: "✅ Benar! Saturnus sangat terkenal dengan cincin-cincinnya yang indah terbuat dari es dan batu." },
+  { q: "Apa yang menyebabkan terjadinya siang dan malam di Bumi?", opts: ["Revolusi Bumi", "Rotasi Bumi", "Gravitasi Bulan", "Pergerakan Matahari"], ans: 1, explain: "✅ Tepat! Rotasi Bumi (berputar pada porosnya) menyebabkan pergantian siang dan malam." },
+  { q: "Planet mana yang paling besar di tata surya?", opts: ["Saturnus", "Uranus", "Neptunus", "Jupiter"], ans: 3, explain: "✅ Benar! Jupiter adalah planet terbesar. Diameternya sekitar 11 kali diameter Bumi!" },
+  { q: "Berapa lama Bumi mengelilingi Matahari (revolusi)?", opts: ["24 jam", "30 hari", "365 hari", "100 hari"], ans: 2, explain: "✅ Tepat! Bumi membutuhkan 365 hari (1 tahun) untuk mengelilingi Matahari satu kali penuh." },
+  { q: "Apa yang dimaksud dengan satelit alami?", opts: ["Pesawat luar angkasa", "Bulan yang mengelilingi planet", "Bintang kecil", "Komet"], ans: 1, explain: "✅ Benar! Satelit alami adalah benda langit yang secara alami mengelilingi planet, seperti Bulan yang mengelilingi Bumi." },
+  { q: "Planet apa yang terletak di urutan ketiga dari Matahari?", opts: ["Venus", "Mars", "Merkurius", "Bumi"], ans: 3, explain: "✅ Tepat! Bumi adalah planet ketiga dari Matahari, setelah Merkurius dan Venus." },
+  { q: "Apa nama benda langit yang punya ekor bercahaya saat mendekati Matahari?", opts: ["Asteroid", "Meteoroid", "Komet", "Satelit"], ans: 2, explain: "✅ Benar! Komet membentuk ekor yang bercahaya saat mendekati Matahari. Ekornya selalu menjauh dari Matahari." }
+];
+
+let currentQ = 0, score = 0, answered = false, quizStarted = false;
+
+function initQuiz() {
+  quizStarted = true;
+  currentQ = 0; score = 0;
+  renderProgress();
+  renderQuestion();
+}
+
+function renderProgress() {
+  const p = document.getElementById('quiz-progress');
+  p.innerHTML = '';
+  questions.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'quiz-dot' + (i < currentQ ? ' done' : i === currentQ ? ' active' : '');
+    p.appendChild(d);
+  });
+}
+
+function renderQuestion() {
+  answered = false;
+  const q = questions[currentQ];
+  document.getElementById('quiz-qnum').textContent = `Pertanyaan ${currentQ + 1} dari ${questions.length}`;
+  document.getElementById('quiz-qtext').textContent = q.q;
+  const opts = document.getElementById('quiz-opts');
+  opts.innerHTML = '';
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-opt';
+    btn.textContent = ['A', 'B', 'C', 'D'][i] + '. ' + opt;
+    btn.onclick = () => selectAnswer(i);
+    opts.appendChild(btn);
+  });
+  document.getElementById('quiz-feedback').className = 'quiz-feedback';
+  document.getElementById('quiz-feedback').textContent = '';
+  document.getElementById('quiz-next').style.display = 'none';
+}
+
+function selectAnswer(idx) {
+  if (answered) return;
+  answered = true;
+  const q = questions[currentQ];
+  const opts = document.querySelectorAll('.quiz-opt');
+  opts.forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === q.ans) btn.classList.add('correct');
+    else if (i === idx && idx !== q.ans) btn.classList.add('wrong');
+  });
+  const fb = document.getElementById('quiz-feedback');
+  if (idx === q.ans) {
+    score++;
+    fb.textContent = q.explain;
+    fb.className = 'quiz-feedback show ok';
+  } else {
+    fb.textContent = '❌ Kurang tepat. ' + q.explain;
+    fb.className = 'quiz-feedback show no';
+  }
+  document.getElementById('quiz-next').style.display = 'inline-block';
+}
+
+function nextQuestion() {
+  currentQ++;
+  if (currentQ >= questions.length) {
+    showResult(); return;
+  }
+  renderProgress();
+  renderQuestion();
+}
+
+function showResult() {
+  document.getElementById('quiz-area').style.display = 'none';
+  document.getElementById('quiz-progress').style.display = 'none';
+  document.getElementById('quiz-result').style.display = 'block';
+  const pct = score / questions.length;
+  let stars = pct >= 0.9 ? '⭐⭐⭐' : pct >= 0.6 ? '⭐⭐' : '⭐';
+  let msg = pct >= 0.9 ? '🎉 Luar biasa! Kamu ahli tata surya!' : pct >= 0.6 ? '😊 Bagus! Terus belajar ya!' : '📖 Yuk baca lagi materinya!';
+  document.getElementById('result-stars').textContent = stars;
+  document.getElementById('result-score').textContent = score;
+  document.getElementById('result-score').style.color = pct >= 0.9 ? '#69f0ae' : pct >= 0.6 ? '#ff9d00' : '#ef9a9a';
+  document.getElementById('result-msg').textContent = msg;
+}
+
+function restartQuiz() {
+  document.getElementById('quiz-area').style.display = 'block';
+  document.getElementById('quiz-progress').style.display = 'flex';
+  document.getElementById('quiz-result').style.display = 'none';
+  initQuiz();
+}
+
+// init quiz if on quiz section
+if (document.getElementById('section-quiz').classList.contains('active')) initQuiz();
+</script>
+</body>
+</html>
